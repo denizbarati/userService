@@ -12,6 +12,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
+const user_module_1 = require("./user/user.module");
 console.log("here", process.env.ALO);
 let AppModule = class AppModule {
 };
@@ -23,12 +24,12 @@ AppModule = __decorate([
                 url: process.env.DATABASE_URL,
                 autoLoadEntities: true,
                 synchronize: true
-            })
+            }),
+            user_module_1.UserModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
-console.log("here", process.env.ALO);
 //# sourceMappingURL=app.module.js.map

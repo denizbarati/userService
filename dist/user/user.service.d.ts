@@ -4,13 +4,9 @@ import { Repository } from "typeorm";
 export declare class UserService {
     private readonly userRepository;
     constructor(userRepository: Repository<UserEntity>);
-    create(createUserDto: UserDto): Promise<{
-        message: UserDto & UserEntity;
-    }>;
-    findAll(): Promise<{
-        message: UserEntity[];
-    }>;
+    create(createUserDto: UserDto): Promise<UserDto>;
+    findAll(): Promise<UserDto[]>;
     findOne(userName: string): Promise<UserDto>;
-    update(userName: string, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;
-    remove(userName: string): Promise<import("typeorm").DeleteResult>;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<Object>;
+    remove(id: number): Promise<Object>;
 }

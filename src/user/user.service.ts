@@ -13,25 +13,19 @@ export class UserService {
     }
 
     //TODO : add response type
-    async create(@Body() createUserDto: UserDto) {
+    async create(@Body() createUserDto: UserDto): Promise<UserDto> {
         try {
             console.log("BODY RECEIVED :", createUserDto)
-            const result = await this.userRepository.save(createUserDto);
-            return {
-                message: result
-            }
+            return await this.userRepository.save(createUserDto);
         } catch (e) {
             console.log("ERR IN CREATE USER: ", e);
             throw e
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<UserDto[]> {
         try {
-            const result = await this.userRepository.find();
-            return {
-                message: result
-            }
+            return await this.userRepository.find();
         } catch (e) {
             console.log("ERR IN FIND ALL USERS: ", e);
             throw e
@@ -48,18 +42,25 @@ export class UserService {
         }
     }
 
-    async update(userName: string, updateUserDto: UpdateUserDto) {
+    async update(id: number, updateUserDto: UpdateUserDto): Promise<Object> {
         try {
-            return await this.userRepository.update(userName, updateUserDto);
+            await this.userRepository.update(id, updateUserDto);
+            return {
+                message: 'Successfully updated'
+            }
+
         } catch (e) {
             console.log("ERR IN UPDATE USER: ", e);
             throw e
         }
     }
 
-    async remove(userName: string) {
+    async remove(id: number): Promise<Object> {
         try {
-            return await this.userRepository.delete(userName);
+            await this.userRepository.delete(id);
+            return {
+                message: 'Successfully deleted'
+            }
         } catch (e) {
             console.log("ERR IN REMOVE USER: ", e);
             throw e

@@ -25,10 +25,7 @@ let UserService = class UserService {
     async create(createUserDto) {
         try {
             console.log("BODY RECEIVED :", createUserDto);
-            const result = await this.userRepository.save(createUserDto);
-            return {
-                message: result
-            };
+            return await this.userRepository.save(createUserDto);
         }
         catch (e) {
             console.log("ERR IN CREATE USER: ", e);
@@ -37,10 +34,7 @@ let UserService = class UserService {
     }
     async findAll() {
         try {
-            const result = await this.userRepository.find();
-            return {
-                message: result
-            };
+            return await this.userRepository.find();
         }
         catch (e) {
             console.log("ERR IN FIND ALL USERS: ", e);
@@ -56,18 +50,24 @@ let UserService = class UserService {
             throw e;
         }
     }
-    async update(userName, updateUserDto) {
+    async update(id, updateUserDto) {
         try {
-            return await this.userRepository.update(userName, updateUserDto);
+            await this.userRepository.update(id, updateUserDto);
+            return {
+                message: 'Successfully updated'
+            };
         }
         catch (e) {
             console.log("ERR IN UPDATE USER: ", e);
             throw e;
         }
     }
-    async remove(userName) {
+    async remove(id) {
         try {
-            return await this.userRepository.delete(userName);
+            await this.userRepository.delete(id);
+            return {
+                message: 'Successfully deleted'
+            };
         }
         catch (e) {
             console.log("ERR IN REMOVE USER: ", e);

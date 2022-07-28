@@ -4,6 +4,8 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import {AuthService} from "../auth/services/auth.service";
+import {MESSAGES} from "../common/enum";
+import {ERROR_MESSAGE} from "../common/enum/errorMsg";
 
 @Injectable()
 export class UserService {
@@ -11,9 +13,7 @@ export class UserService {
     constructor(
         @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
         private authService: AuthService
-    ) {
-    }
-
+    ) { }
 
     async create(@Body() createUserDto: UserDto): Promise<UserDto> {
         try {
@@ -31,7 +31,7 @@ export class UserService {
             return result
         } catch (e) {
             console.log("ERR IN CREATE USER: ", e);
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -44,7 +44,7 @@ export class UserService {
             return result
         } catch (e) {
             console.log("ERR IN FIND ALL USERS: ", e);
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -56,7 +56,7 @@ export class UserService {
             return result
         } catch (e) {
             console.log("ERR IN FIND ONE USER: ", e);
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,12 +67,12 @@ export class UserService {
 
             await this.userRepository.update(id, updateUserDto);
             return {
-                message: 'Successfully updated'
+                message: MESSAGES.SUCCESSFULLY_UPDATED
             }
 
         } catch (e) {
             console.log("ERR IN UPDATE USER: ", e);
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -80,11 +80,11 @@ export class UserService {
         try {
             await this.userRepository.delete(id);
             return {
-                message: 'Successfully deleted'
+                message: MESSAGES.SUCCESSFULLY_DELETED
             }
         } catch (e) {
             console.log("ERR IN REMOVE USER: ", e);
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -96,7 +96,7 @@ export class UserService {
                 message: jwt
             }
         } catch (e) {
-            throw e
+            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -104,14 +104,14 @@ export class UserService {
     async validateUser(email: string, password: string) {
         const user = await this.findUserByMail(email)
         if (!user) {
-            throw new HttpException('user not found', HttpStatus.FORBIDDEN);
+            throw new HttpException(ERROR_MESSAGE.USER_NOT_FOUND, HttpStatus.FORBIDDEN);
         }
         const comparePass = await this.authService.comparePassword(password, user.password)
         if (comparePass) {
             delete user.password
             return user
         } else {
-            throw new HttpException('invalid email or password', HttpStatus.BAD_REQUEST);
+            throw new HttpException(ERROR_MESSAGE.INVALID_USERNAME_OR_PASSWORD, HttpStatus.BAD_REQUEST);
         }
 
     }

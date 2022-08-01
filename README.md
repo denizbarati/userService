@@ -27,6 +27,6 @@ Example of file:
 ## Start the Backend in dev Mode With Docker
 `login in` https://hub.docker.com  
 `run docker build -t {Image Name} .`  
-`run the image with this command : **_docker run -p port:port -d --name {container name} {image name}**_ `
+`run the image with this command : docker run -p port:port -d --name {container name} {image name} `
 
 If you have any questions, you can contact me via email: fatemehbaratit@gmail.com

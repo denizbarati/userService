@@ -10,7 +10,7 @@ export class AuthService {
     }
 
     async generateJWT(user: UserDto): Promise<string> {
-        return await this.jwtService.signAsync(user)
+        return await this.jwtService.signAsync(JSON.stringify(user))
     }
 
     async generatePassword(password: string) {

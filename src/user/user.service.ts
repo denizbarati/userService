@@ -1,4 +1,4 @@
-import {Body, HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable,} from '@nestjs/common';
 import {UpdateUserDto, UserDto} from './dto/user.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "./entities/user.entity";
@@ -13,9 +13,10 @@ export class UserService {
     constructor(
         @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
         private authService: AuthService
-    ) { }
+    ) {
+    }
 
-    async create(@Body() createUserDto: UserDto): Promise<UserDto> {
+    async createUser(createUserDto: UserDto): Promise<UserDto> {
         try {
             console.log("BODY RECEIVED :", createUserDto)
             const hashPassword = await this.authService.generatePassword(createUserDto.password)
@@ -35,7 +36,7 @@ export class UserService {
         }
     }
 
-    async findAll(): Promise<UserDto[]> {
+    async findAllUsers(): Promise<UserDto[]> {
         try {
             const result = await this.userRepository.find();
             result.forEach(item => {
@@ -49,7 +50,7 @@ export class UserService {
 
     }
 
-    async findOne(userName: string): Promise<UserDto> {
+    async findOneUser(userName: string): Promise<UserDto> {
         try {
             const result = await this.userRepository.findOneBy({userName});
             delete result.password
@@ -60,7 +61,7 @@ export class UserService {
         }
     }
 
-    async update(id: number, updateUserDto: UpdateUserDto): Promise<Object> {
+    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<Object> {
         try {
             delete updateUserDto.password,
                 delete updateUserDto.email
@@ -76,7 +77,7 @@ export class UserService {
         }
     }
 
-    async remove(id: number): Promise<Object> {
+    async removeUser(id: number): Promise<Object> {
         try {
             await this.userRepository.delete(id);
             return {
@@ -91,14 +92,15 @@ export class UserService {
     async login(user: UserDto) {
         try {
             const findUser = await this.validateUser(user.email, user.password)
+            console.log("find user:", findUser)
             const jwt = await this.authService.generateJWT(findUser)
             return {
                 message: jwt
             }
         } catch (e) {
-            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            console.log("err", e)
+            throw e
         }
-
     }
 
     async validateUser(email: string, password: string) {

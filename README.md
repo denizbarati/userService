@@ -1,9 +1,9 @@
 # userService
-The project is based on NestJs, which the user creates and verifies,
-After creating a user, you can log in and get the list of users and update or delete them if needed.
-After login, the token is returned to the user.
-The jwt service is used for tokenization.
-postgres database is used in this project
+- The project is based on NestJs, which the user creates and verifies
+- After creating a user, you can login and get the list of users and update or delete them if needed.
+- After login, the token is returned to the user.
+- The jwt service is used for tokenization.
+- postgres database is used in this project
 
 # instructions to run the project
 ## 1. Switch to branch develop to get the latest changes

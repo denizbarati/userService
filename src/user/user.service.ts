@@ -18,7 +18,10 @@ export class UserService {
 
     async createUser(createUserDto: UserDto): Promise<UserDto> {
         try {
+            const userName = createUserDto.userName
             console.log("BODY RECEIVED :", createUserDto)
+            const isExistUser = await this.userRepository.findOneBy({userName})
+            if (isExistUser) throw new HttpException(ERROR_MESSAGE.USER_EXIST, HttpStatus.BAD_REQUEST);
             const hashPassword = await this.authService.generatePassword(createUserDto.password)
             console.log("hashPassword", hashPassword)
             const newUser = new UserEntity()
@@ -32,7 +35,7 @@ export class UserService {
             return result
         } catch (e) {
             console.log("ERR IN CREATE USER: ", e);
-            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw e ? e : new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -53,11 +56,12 @@ export class UserService {
     async findOneUser(userName: string): Promise<UserDto> {
         try {
             const result = await this.userRepository.findOneBy({userName});
+            if (!result) throw new HttpException(ERROR_MESSAGE.USER_NOT_FOUND, HttpStatus.BAD_REQUEST);
             delete result?.password
             return result
         } catch (e) {
             console.log("ERR IN FIND ONE USER: ", e);
-            throw new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw e
         }
     }
 
@@ -99,7 +103,7 @@ export class UserService {
             }
         } catch (e) {
             console.log("err", e)
-            throw e
+            throw e ? e : new HttpException(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -28,7 +28,7 @@ export class UserService {
             newUser.email = createUserDto.email
             newUser.password = hashPassword
             const result = await this.userRepository.save(newUser);
-            delete result.password
+            delete result?.password
             return result
         } catch (e) {
             console.log("ERR IN CREATE USER: ", e);
@@ -39,8 +39,8 @@ export class UserService {
     async findAllUsers(): Promise<UserDto[]> {
         try {
             const result = await this.userRepository.find();
-            result.forEach(item => {
-                delete item.password
+            result?.forEach(item => {
+                delete item?.password
             })
             return result
         } catch (e) {
@@ -53,7 +53,7 @@ export class UserService {
     async findOneUser(userName: string): Promise<UserDto> {
         try {
             const result = await this.userRepository.findOneBy({userName});
-            delete result.password
+            delete result?.password
             return result
         } catch (e) {
             console.log("ERR IN FIND ONE USER: ", e);

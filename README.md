@@ -1,28 +1,39 @@
 # userService
-The project is based on NestJs, which the user creates and verifies
+The project is based on NestJs, which the user creates and verifies,
+After creating a user, you can log in and get the list of users and update or delete them if needed.
+After login, the token is returned to the user.
+The jwt service is used for tokenization.
+postgres database is used in this project
 
 # instructions to run the project
 ## 1. Switch to branch develop to get the latest changes
 ## 2. Add an environment file to the project
-Add a .env file in the api folder (at the top of your api folder, so nest can find it)
-- add your own DATABASE_URL in the .env file
+Add a .env file in the api folder
+- add your own dataBase config in the .env file
 - add your own JWT_SECRET in the .env file
 
-add your own DATABASE_URL in the .env file
-add your own JWT_SECRET in the .env file
 
 Database:  
-You can use the free database from www.elephantsql.com
+if you have mac you can use pgAdmin4 for your db
 
 Example of file:
 
-    DATABASE_URL=<your url>  
+    POSTGRES_HOST=<your host>  
+    POSTGRES_USER=<your user>
+    ...
     JWT_SECRET=jklasjdoij897231na
 
 ## Start the Backend in dev Mode after you added the .env file
 `npm install`  
+`npm run build`
 `npm run start:dev`  
 
+# Start the e2e tests 
+`npm run test:e2e`
+
+# Start the unit tests
+`npm run test`
+`npm run test:watch`
 
 ## Start the Backend in dev Mode With Docker
 `login in` https://hub.docker.com  

@@ -1,7 +1,2 @@
 node_modules
 Dockerfile
-.dockerignore
-.gitignore
-nest-cli.json
-README.md
-README 2.md
